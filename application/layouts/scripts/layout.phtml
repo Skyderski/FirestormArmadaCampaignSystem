@@ -1,0 +1,32 @@
+<?php echo $this->doctype() ?>
+<html>
+<head>
+    <?php echo $this->headTitle() ?>
+    <?php echo $this->headLink() ?>
+    <?php echo $this->headStyle() ?>
+    <?php echo $this->headScript() ?>
+    <?php 
+    echo $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8'); 
+    
+        
+    ZendX_JQuery::enableView($this);
+
+    echo $this->jQuery()
+	->setVersion('1.5.1')
+	->setUiVersion('1.8.11')
+	->enable()
+	->uiEnable();
+    
+    
+    ?>
+</head>
+<body>
+    <div id="header"><?php echo $this->layout()->title ?></div>
+    <div id="toolbar">
+        <?php echo $this->layout()->toolbar;?>
+    </div>
+    <div id="content">
+    <?php echo $this->layout()->content ?>
+     </div>
+</body>
+</html>

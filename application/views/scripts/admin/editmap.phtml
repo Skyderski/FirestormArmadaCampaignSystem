@@ -1,0 +1,18 @@
+<?php
+
+
+?>
+
+<form action="/admin/editMap">
+    <label for="name">Nom :</label><input id="name" name="name" type="text" value="<?echo $this->map->name?>"/>
+    <label for="height">Hauteur :</label><input id="height" size="2" maxlength="2" name="height" type='text' value="<?echo $this->map->height?>"/>
+    <label for="width">Largeur :</label><input id="width" name="width" size="2" maxlength="2" type='text' value="<?echo $this->map->width?>"/> 
+    <label for="background">Background :</label><input id="background" name="background" type="text" value="<?echo $this->map->background?>"/>
+    <select name="active" id="active">
+        <option value="0" <?php echo (!$this->map->active)?'selected':'';?>>inactive</option>
+        <option value="1" <?php echo ($this->map->active)?'selected':'';?>>active</option>
+    </select>
+    <input type="submit"/>
+    <input type="hidden" name="mapid" id="mapid" value="<?echo $this->map->id?>"/>
+    <input type="hidden" name="edit" id="edit" value="1"/>
+</form>

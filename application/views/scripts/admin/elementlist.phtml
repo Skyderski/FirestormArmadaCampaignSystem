@@ -1,0 +1,114 @@
+<?php
+
+$mapData = $this->displayMap($this->map,$this->elementList,1);
+
+$this->headStyle()->appendStyle($mapData['style']);
+$this->headStyle()->appendStyle($mapData['style'],array('media'=>'print'));
+
+
+$this->headScript()->appendScript($mapData['script']);
+ 
+ 
+
+   
+?>
+
+<div id="elementdetail"> 
+    <a href="#" class="buttonclose" onclick="$('#elementdetail').hide('slow');">fermer</a>
+    <div id="elementdetailcontent">&nbsp;</div>
+    
+</div>
+
+<!-- Render the hex map inside of a div block -->
+    <div id='hexmap' class='hexmap'>
+      
+
+      <?php echo $mapData['maphtml']; ?>
+        
+    </div>
+
+<div id="adminTable">
+    <a href=" <?=$this->url(array('controller' => 'admin', 'action' => 'createrandomelement', 'density' => 45));?>">Créer des éléments Aléatoires (env.45% de densité)</a><br/>
+    <a href=" <?=$this->url(array('controller' => 'admin', 'action' => 'deleteallelements', 'mapid' => $this->map->id));?>">Vider la carte</a><br/>
+    
+    <!-- <form action="/admin/createRandomElement">
+            <h2>Creation automatique d'éléments</h2>
+            <input id="nb"
+                name="nb"
+                size="2"
+                maxlength="3"
+                type='text'/>
+            <input type="submit"/>
+            <input id="mapid"
+                            name="mapid" 
+                            value="<?=$this->map->id?>"  
+                            type='hidden'/>
+
+        </form>
+-->
+        <table class="adminlist">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Image</th>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Ressources</th>
+                    <th>Population</th>
+                    <th>Tech</th>
+                    <th>Defense</th>
+                    <th>Coordonnées</th>
+                    <th>actif</th>
+                    <th>actions</th>
+
+                </tr>
+
+            </thead>
+
+
+
+
+        <?php
+
+        if(count($this->elementList))
+            foreach($this->elementList as $element){
+
+
+
+            ?>
+            <tr>
+                <td><?echo $element->id;?></td>
+                <td><img src="<?echo Model_DbTable_Element::IMAGEPATH.$element->image;?>"/></td>
+                <td><?echo $element->name;?></td>
+                <td> <? echo $element->type?>
+                <td><?echo $element->ressources;?></td>
+                <td><?echo $element->population;?></td>
+                <td><?echo $element->tech;?></td>
+                <td><?echo $element->defences;?></td>
+                <td>X:<?echo $element->Xcoord;?>-Y:<?echo $element->Ycoord;?></td>
+                <td>
+                    <a class="active<?echo $element->active; ?>" href="/admin/switchactivation/mapid/<?echo $element->id;?>">
+                    <?=($element->active)?"desactiver":"activer"?>
+                    </a>    
+                </td>
+                <td>
+                    <a class="delete" href="/admin/deleteelement/id/<?echo $element->id;?>">delete</a>
+                    <a class="edit" href="/admin/editelement/id/<?echo $element->id;?>">edit</a>
+
+                </td>
+
+            </tr>
+
+            <?php
+            }
+
+        ?>
+
+
+
+        </table>
+</div>
+
+<div class="clear:both"></div>
+
+  

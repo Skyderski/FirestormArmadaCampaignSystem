@@ -1,0 +1,194 @@
+/* 
+    Document   : style
+    Created on : 29 juin 2012, 23:01:11
+    Author     : A105849
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+body{
+    margin:0;
+    padding:0;
+    font-size: 12px;
+    background-color:#000;
+    color:#fff;
+}
+
+a{
+    color:#fff;
+    
+}
+
+#header{
+    height:100px;
+  /*  background: url('/images/common/hexa.png') ;*/
+    color:#fff;
+    font-size: 3em;
+    
+}
+
+#toolbar{
+    
+    height:30px;
+    border-top:2px solid  #54FFFF;   
+    /*#0DFFFC*/
+    
+}
+
+#content{
+    padding : 0 20px;
+    
+}
+
+
+.adminlist {
+    border:6px solid #8FADF9;
+    border-color:#FF1E00;   
+    
+    border-radius:15px 0px;
+    padding:5px;
+    margin: 5px;
+    
+    
+}
+.adminlist a{
+    color:#000;
+    
+    
+}
+
+.adminlist th {
+    background : #8FADF9;
+    background : #877B79;
+    
+}
+
+.adminlist td {
+    text-align: center;
+    
+}
+
+.adminlist tr {
+    
+    
+}
+.adminlist tr:nth-child(even) {
+    background: #ACC3FC;
+    background: #B49F9C;
+    color : #000;
+}
+.adminlist tr:nth-child(odd) {
+   background: #C1D2FC;
+   background: #DAC6C4;
+   color: #000
+
+}
+
+/* details des elements*/ 
+
+#elementdetail{
+    
+    position:fixed;
+    right:10px;
+    top:45px;
+    z-index: 300;
+    width:300px;
+    padding:5px;
+    border:6px solid #AF1100;
+    border-radius:15px 0px;   
+    background:#000;
+    display:none;
+   
+    
+}
+
+dt,dd{
+    float:left;
+    margin-left:2px;
+}
+dt{
+    width: 80px;
+    clear:both;
+}
+
+#coord-label{
+    display:none;
+    
+}
+#attributes-label{
+    display: none;
+}
+
+#coord-element{
+    clear:both;
+    float:left;
+    width:100%;
+    
+}
+
+#fieldset-coord {
+    margin:auto;
+    padding:2px;
+    width:95%;
+}
+#coord-element dt,#coord-element dd{
+    clear: none;
+    float:left;
+    width:24%;
+}
+
+#fieldset-attributes {
+    margin:auto;
+    padding:2px;
+    width:95%;
+}
+#attributes-element dt,#attributes-element dd{
+    clear: none;
+    float:left;
+    width:24%;
+}
+
+
+/* listes */
+
+#adminTable{
+    display:block;
+    
+}
+
+#adminTable h2{
+    font-size:1.2em;
+    color : #FF1E00;
+    
+}
+
+
+
+.hexmap{
+    margin:15px 0;
+        
+    border:6px solid #AF1100;
+   border-radius:15px 0px;   
+}
+
+.hex img{
+    position:absolute;
+    top:0;
+    
+}
+
+
+#elementdetail .buttonclose{
+    background : transparent url('/images/icons/Knob Cancel.png');
+    background-size: 15px 15px;
+    width:15px;
+    display:block;
+    overflow: hidden;
+    color:transparent;
+    float:right;
+    
+}
