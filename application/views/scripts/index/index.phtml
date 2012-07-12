@@ -1,6 +1,21 @@
 <div class="link2map">
     
-    <a href="/index/map/mapid/1">Carte</a>
-    <?php echo $this->form ;?>
+    <ul>
+        <?
+        foreach( $this->mapList as $map){
+            
+            
+            $url = $this->url(array('controller' => 'index', 'action' => 'map', 'mapid' => $map->id));
+            echo "<li><a href='{$url}'>".$map->name."</a></li>";
+            
+            
+            
+        }
+        
+        ?>
+        
+    </ul>
+    
+   
     
 </div>

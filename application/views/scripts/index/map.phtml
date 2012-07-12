@@ -7,7 +7,8 @@ $this->layout()->title = $this->map->name;
 
 
 //recuperation des données de carte
-$mapData = $this->displayMap($this->map,$this->elements,0.5);
+
+$mapData = $this->displayMap($this->map,$this->elementList,1);
 
 // ajouts des elements css dynamique et js dynamique
 $this->headStyle()->appendStyle($mapData['style']);
@@ -15,12 +16,16 @@ $this->headScript()->appendScript($mapData['script']);
 ?>       
 
     
-   
+   <div id="elementdetail"> 
+    <a href="#" class="buttonclose" onclick="$('#elementdetail').hide('slow');">fermer</a>
+    <div id="elementdetailcontent">&nbsp;</div>
+    
+</div>
 
      <!-- Render the hex map inside of a div block -->
     <div id='hexmap' class='hexmap' onclick='handle_map_click(event);'>
         <?php echo $mapData['maphtml']; ?>
-        <img id='highlight' class='hex' src='/images/map/hex-highlight.png' style='zindex:100;'>
+        
     </div>
 
    

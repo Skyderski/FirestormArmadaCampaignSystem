@@ -363,7 +363,7 @@ EOD;
 			{
                             
                             
-                            for ($i = 0; $i < 50; $i++)
+                            for ($i = 0; $i < 32; $i++)
                             {$dynamicSalt .= chr(rand(33, 126));}
 
                             $passwordsalted = $form->getValue("password").$dynamicSalt;
