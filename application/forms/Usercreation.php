@@ -1,18 +1,14 @@
 <?php
-class Application_Form_User extends Zend_Form
+class Application_Form_Usercreation extends Zend_Form
 {
 	
 	protected $_id=0;
-        protected $_isEdit=0;   
     
  	public function __construct($options = null)
     {
     	if($options['id']){
     		$this->_id= $options['id'];
     	}
-        if($options['edit']){
-            $this->_isEdit=1;
-        }
         
         
     	parent::__construct($options);
@@ -31,31 +27,21 @@ class Application_Form_User extends Zend_Form
         $id = new Zend_Form_Element_Hidden('id');
         $id->setDecorators(array('ViewHelper'));
 		$form[] = $id;
-                
-        $edit= new Zend_Form_Element_Hidden('edit');
-        $edit->setValue($this->_isEdit)
-                ->setDecorators(array('ViewHelper'));;
         
-      $form[] = $edit;
+      
        		
         $name = new Zend_Form_Element_Text('username');
         $name->setLabel('Nom d\'utilisateur*')
               ->setRequired(true)
               ->addFilter('StripTags')
               ->addFilter('StringTrim')
-              ->addValidator('stringLength', false, array(3, 20))
+              ->addValidator('stringLength', false, array(6, 20))	
                 ->addValidator(new Zend_Validate_Alnum())
                 ->addValidator('regex', false, array('/^[a-z]+/'))
               ->addValidator('NotEmpty')
                    ->addFilter('StringToLower');
-        
-        if(!$this->_isEdit){
-            
-            $name->addValidator( new Zend_Validate_Db_NoRecordExists(array('table'=>'users','field'=>'username')));
-        }
          $form[] =$name;
 
-         
          $password = new Zend_Form_Element_Password('password');
          $password->setLabel('Mot de passe*')
                  ->setRequired(true)

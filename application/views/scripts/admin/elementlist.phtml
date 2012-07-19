@@ -13,19 +13,28 @@ $this->headScript()->appendScript($mapData['script']);
    
 ?>
 
-<div id="elementdetail"> 
-    <a href="#" class="buttonclose" onclick="$('#elementdetail').hide('slow');">fermer</a>
+<div id="elementdetail">
+    <div class="elementdetailinner"> 
+        <a href="#" class="buttonclose" onclick="$('#elementdetail').hide('slow');">fermer</a>
+    
+    
     <div id="elementdetailcontent">&nbsp;</div>
+    <div class="clear:both">&nbsp;</div>
+    </div>
     
 </div>
 
 <!-- Render the hex map inside of a div block -->
-    <div id='hexmap' class='hexmap'>
-      
+    <div class="hexmapborder">
+        <div>
+            <div id='hexmap' class='hexmap'>
+         <?php echo $mapData['maphtml']; ?>
+            </div>
 
-      <?php echo $mapData['maphtml']; ?>
-        
+        </div>
     </div>
+
+   
 
 <div id="adminTable">
     <a href=" <?=$this->url(array('controller' => 'admin', 'action' => 'createrandomelement', 'density' => 45));?>">Créer des éléments Aléatoires (env.45% de densité)</a><br/>

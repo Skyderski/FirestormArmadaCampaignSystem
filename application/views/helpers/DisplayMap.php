@@ -32,15 +32,26 @@ class Zend_View_Helper_DisplayMap extends Zend_View_Helper_Abstract{
         $hexmapElementWidth = $HEX_HEIGHT * 1.5;
         $hexmapBackGround='/images/map/backgrounds/'.$map->background;
         
+        $hexmapWidthBorder = $hexmapWidth+5;
+        $hexmapHeightBorder = $hexmapHeight+5;
+        
         $styleOutput = <<<EOD
-        .hexmap {
+        .hexmap{
             width: {$hexmapWidth}px;
             height: {$hexmapHeight}px;
             position: relative;
-            background: #000;
-            background-image:url('{$hexmapBackGround}');
+           
+             background-image:url('{$hexmapBackGround}');
+            
         }
-
+             
+        .hexmapborder{
+             width: {$hexmapWidthBorder}px;
+            height: {$hexmapHeightBorder}px;
+        }
+             
+             
+       
         .hex-key-element {
             width: {$hexmapElementWidth}px;
             height: {$hexmapElementHeight}px;

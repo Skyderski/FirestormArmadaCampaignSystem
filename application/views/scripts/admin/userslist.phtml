@@ -1,0 +1,87 @@
+<?php
+
+ 
+
+?>
+<div id="elementdetail">
+    <div class="elementdetailinner"> 
+        <a href="#" class="buttonclose" onclick="$('#elementdetail').hide('slow');">fermer</a>
+    
+    
+    <div id="elementdetailcontent">&nbsp;</div>
+    
+    <div style="clear:both;"></div> 
+    </div>
+    <div style="clear:both;"></div>
+</div>
+
+<div id="adminTable">
+    
+    <?=$this->ajaxLink("Ajouter",
+                  $this->url(array('controller' => 'admin', 'action' => 'adduser')) ,
+                    array('update' => '#elementdetailcontent',
+                            'class' => 'hexlink',
+                            'beforeSend' => "$('#elementdetailcontent').hide('slow');$('#elementdetail').hide('slow');",
+                        'complete' => "$('#elementdetail').show('slow');$('#elementdetailcontent').show('fast');",
+                          ));?>
+   
+        <table class="adminlist">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Actif</th>
+                    <th>Admin</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+
+
+
+        <?php
+
+        if(count($this->list))
+            foreach($this->list as $user){
+
+
+
+            ?>
+            <tr>
+                <td><?echo $user->id;?></td>
+                <td><?echo $user->username;?></td>
+                <td> <? echo $user->email?>
+                <td>
+                    <a class="active<?echo $user->active; ?>" href="/admin/switchuseractivation/id/<?echo $user->id;?>">
+                    <?=($user->active)?"desactiver":"activer"?>
+                    </a>    
+                </td>
+                <td>
+                    <?=($user->role)?"Admin":"-"?>
+                </td>
+                <td>
+                    <a class="delete" href="/admin/deleteuser/id/<?echo $user->id;?>">delete</a>
+                     <?=$this->ajaxLink("Modifier",
+                        $this->url(array('controller' => 'admin', 'action' => 'adduser', 'id'=>$user->id)) ,
+                            array('update' => '#elementdetailcontent',
+                            'class' => 'hexlink',
+                            'beforeSend' => "$('#elementdetailcontent').hide('slow');$('#elementdetail').hide('slow');",
+                            'complete' => "$('#elementdetail').show('slow');$('#elementdetailcontent').show('fast');",
+                          ));?>
+                </td>
+
+            </tr>
+
+            <?php
+            }
+
+        ?>
+
+
+
+        </table>
+</div>
+
+<div class="clear:both"></div>

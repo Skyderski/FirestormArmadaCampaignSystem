@@ -7,23 +7,31 @@ class IndexController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
     }
+    
+    /* fonction appellee avant chaque action */
+     public function preDispatch()
+    {
+        if (!Zend_Auth::getInstance()->hasIdentity()) {
+                $this->_helper->redirector('index','login');
+            }
+            
+        $this->view->layout()->toolbar = $this->view->toolbar();
+        
+    }
+ 
 
     public function indexAction()
     {
-        
+        $identity = Zend_Auth::getInstance()->getIdentity();
          $maps = new Model_DbTable_Map();
-         $this->view->mapList = $maps->getAllMaps();
+         $this->view->mapList = $maps->getAllMaps($identity);
         
-        
-        // action body
-        $form = new Application_Form_Login();
-			
-	// mise en place des decorators
-	$form->addDecorator('Description', array('placement' => 'PREPEND','class' => 'chapeau'));
-        $this->view->form = $form;
+         if(count($this->view->mapList)==1)
+            $this->_redirect($this->view->url(array('controller' => 'index', 'action' => 'map', 'mapid' => $this->view->mapList[0]->mapid),null,true));
         
               
     }
+    
     
     public function mapAction()
     {

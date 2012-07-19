@@ -44,6 +44,9 @@ body{
     font-size: 12px;
     background-color:#000;
     color:#fff;
+    background-image: url('/images/map/backgrounds/galaxie1.jpg') ;
+    background-attachment:fixed;
+    
 }
 
 a{
@@ -61,10 +64,50 @@ a{
 
 #toolbar{
     
-    height:30px;
-    border-top:2px solid  #54FFFF;   
-    /*#0DFFFC*/
     
+    background:#000;
+    padding : 0;
+    margin:0 0 20px 0;
+    text-align:right;
+    
+     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#157BC6), to(#05102E));
+    background-image: -moz-linear-gradient(0% 100% 90deg,#05102E,#157BC6);
+   border:1px solid #10E3FF;
+    border-left:0px;
+    border-right: 0;
+    
+    
+    
+}
+
+#toolbar ul {
+    
+    margin: auto;
+    padding:0;
+}
+#toolbar ul li{
+    display:inline;
+    padding:3px;
+   
+}
+#toolbar ul li a{
+  text-decoration: none;
+   font-family: NakadaiRegular;
+   font-size:0.9em;
+}
+
+#toolbar ul li:hover{
+  
+   color:#000;
+   /*#10E3FF*/
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0.1)), to(rgba(255,255,255,0.8)));
+    background-image: -moz-linear-gradient(0% 100% 90deg,rgba(255, 255, 255, 0.1),#10E3FF);
+    
+}
+
+#toolbar ul li:hover a{
+   
+   color:#000;
 }
 
 #content{
@@ -135,7 +178,7 @@ a{
 }
 
 dt,dd{
-    float:left;
+    
     margin-left:2px;
 }
 dt{
@@ -197,10 +240,10 @@ dt{
 
 
 .hexmap{
-    margin:15px 0;
-        
+    margin: 0;
     border:6px solid #AF1100;
-   border-radius:15px 0px;   
+    border-radius:15px 0px;   
+    background:#000;
 }
 
 .hex img{
@@ -220,3 +263,53 @@ dt{
     float:right;
     
 }
+
+
+.hexmap , #elementdetail{
+
+   /* border-color:#54FFFF;/*
+    border-color:#3DE587;/*
+    border-color:#035673;
+   /*border-color: #03E8FF;*/
+   /*border-image:-webkit-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);*/
+   border:none;
+   border-radius:15px 0;
+}
+
+.hexmap{
+    border:none;
+}
+
+.hexmapborder,#elementdetail{
+       
+    background-color:#10E3FF;
+    background-image: radial-gradient(center top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
+    
+    background-color:#0F53B4;
+    background-image: -moz-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
+    background-image: -webkit-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
+    background-image: -o-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
+    background-image: -ms-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
+    background-image: radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
+
+    
+    padding:2px 5px ;
+    width:auto;
+    border-radius:15px 0;
+    
+}
+
+.elementdetailinner{
+     border-radius:15px 0;
+    background:#000;
+    padding:5px;
+    margin:3px;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#157BC6), to(#05102E));
+    background-image: -moz-linear-gradient(0% 100% 90deg,#05102E,#157BC6);
+    width:300px;
+
+    
+}
+
+
+    

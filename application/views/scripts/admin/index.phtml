@@ -8,10 +8,72 @@
 
 ?>
 
-<h1>Interface d'administration</h1>
-<div class="loginform">
-    <?=$this->form;?>
-</div>
+
+<table class="adminlist">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>nom</th>
+            <th>taille <br/> (hauteur x largeur)</th>
+            <th>background</th>
+            <th>actif</th>
+            <th>actions</th>
+            
+        </tr>
+        
+    </thead>
+    
+    
+
+
+<?php
+
+if(count($this->mapList))
+    foreach($this->mapList as $map){
+    
+    
+    
+    ?>
+    <tr>
+        <td><?echo $map->id;?></td>
+        <td><a href="/admin/elementlist/mapid/<?=$map->id?>"><?echo $map->name;?></a></td>
+        <td><?echo $map->height;?>x<?echo $map->width;?></td>
+        <td><?echo $map->background;?></td>
+        
+        <td >
+            <a class="active<?echo $map->active; ?>" href="/admin/switchactivation/mapid/<?echo $map->id;?>">
+            <?=($map->active)?"desactiver":"activer"?>
+            </a>    
+        </td>
+        <td>
+            <a class="delete" href="/admin/deletemap/mapid/<?echo $map->id;?>">delete</a>
+            <a class="edit" href="/admin/editmap/mapid/<?echo $map->id;?>">edit</a>
+            
+        </td>
+        
+    </tr>
+    
+    <?php
+    }
+ 
+ 
+ 
+ 
+ ?>
+
+    
+    <tr class="addform">
+        <td>&nbsp;</td>
+        <form action="/admin/addMap">
+            <td><input id="name" name="name" type="text"/></td>
+            <td><input id="height" size="2" maxlength="2" name="height" type='text'/> X <input id="width" name="width" size="2" maxlength="2" type='text'/> </td>
+            <td><input id="background" name="background" type="text"/></td>
+            <td></td>
+            <td><input type="submit"/></td>
+        </form>
+
+    </tr>
+</table>
 
 
 

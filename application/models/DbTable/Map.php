@@ -5,9 +5,22 @@ class Model_DbTable_Map extends Zend_Db_Table_Abstract
     protected $_primary = 'id';
     
     
-    public function getAllMaps(){
+    public function getAllMaps($identity=null){
         
-        return $this->fetchAll();
+        
+        if($identity){
+            $userModel = new Model_DbTable_User();
+            $user = $userModel->getUserByName($identity);
+           
+           $select = $this->select("maps")->setIntegrityCheck(false)->join('map2user', 'mapid=maps.id')
+                   ->join("users",'map2user.userid=users.id');
+        }else
+        {
+            
+            return $this->fetchAll();
+        }
+        
+      return $this->fetchAll($select);
         
         
     }

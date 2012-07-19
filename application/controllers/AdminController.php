@@ -7,35 +7,37 @@ class AdminController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
     }
+    
+      public function preDispatch()
+    {
+        if (!Zend_Auth::getInstance()->hasIdentity()) {
+                $this->_helper->redirector('index','login');
+            }
+        else{
+            $identity = Zend_Auth::getInstance()->getIdentity();
+            $userModel = new Model_DbTable_User();
+            $role = $userModel->getRoleFromIdentity($identity);
+           if($role!=Model_DbTable_User::ADMIN){
+             $this->_helper->redirector('index','login');
+           }
+            
+              
+                
+            }
+            
+             $this->view->layout()->toolbar = $this->view->toolbar();
+              $this->view->layout()->title = "Interface d'Administration";
+      
+        
+    }
 
     public function indexAction()
     {
-       /* if ($this->getRequest()->isPost())
-		{
-			$formData = $this->getRequest()->getPost();
-			//Contrôle automatique ZendForm
-			if ($form->isValid($formData))
-			{
-				//Récupération des  données du formulaire
-				$reponses = $form->getValues();
-				$reponses=$reponses[$form->getName()];
-
-				// test login
-                                
-                                
-				$this->_redirect('/admin/index');
-			}
-                        
-		}
+       
+        $maps = new Model_DbTable_Map();
+        $this->view->mapList = $maps->getAllMaps();
         
-        
-       // prevoir le login ici
-        $faSession = new Zend_Session_Namespace('faSession');
-	
-        $faSession->userId = $id;
-        */
-      $this->view->form= new Application_Form_Login(); 
-      
+       
       
         
     }
@@ -128,6 +130,8 @@ EOD;
         
         $maps = new Model_DbTable_Map();
 	$this->view->mapList = $maps->getAllMaps();
+        
+        $this->view->layout()->title .= " - Cartes ";
         
     }
     
@@ -227,6 +231,8 @@ EOD;
         $elements = new Model_DbTable_Element();
         $this->view->map =  $maps->getMap($mapid);
         
+         $this->view->layout()->title .= " - Carte : ".$this->view->map->name;
+        
         
         
         $form = new Application_Form_Element();
@@ -275,7 +281,7 @@ EOD;
         
         echo $form;
         
-        
+        echo '<div class="clear:both">&nbsp;</div>';
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(TRUE);
         
@@ -347,35 +353,64 @@ EOD;
     }
     
     
-    public function userlistAction(){
+    public function userslistAction(){
         
          $form = new Application_Form_User();
          $this->view->form = $form;
          
-          $userModel = new Model_DbTable_User();
+         $this->view->layout()->title .= " - Utilisateurs ";
          
+          $userModel = new Model_DbTable_User();
+          
+          $this->view->list = $userModel->getAllUsers();
          
          if ($this->getRequest()->isPost())
 		{
             		$formData = $this->getRequest()->getPost();
-			//Contrôle automatique ZendForm
+                       
+                       $form->populate($formData);
+                        $reponses = $form->getValues();
+                        $reponses=$reponses[$form->getName()];
+                        $isEdit =$reponses['edit']; 
+                        
+                        
+                        if($isEdit){
+                                 $form = new Application_Form_User(array('edit'=>1));
+                        }
+                            
+                        //Contrôle automatique ZendForm
 			if ($form->isValid($formData))
 			{
+                            unset($reponses['edit']);
+                            	//Récupération des  données du formulaire
                             
+                           if($reponses['password'])
+                                    $reponses['password']=md5($reponses['password']);
+                            else
+                                    unset($reponses['password']);
                             
-                            for ($i = 0; $i < 32; $i++)
-                            {$dynamicSalt .= chr(rand(33, 126));}
-
-                            $passwordsalted = $form->getValue("password").$dynamicSalt;
-                            $riders->set_password(md5($passwordsalted));
-                            $riders->set_salt($dynamicSalt);
-				//Récupération des  données du formulaire
-				$reponses = $form->getValues();
-				$reponses=$reponses[$form->getName()];
-
-				$userModel->addUser($reponses);
+                            if($isEdit)
+                            {
+                               $userModel->updateUser($reponses);
+                            }
+                            else{
+                               $userModel->addUser($reponses);
+                                }
+                                    
 				
-			}
+			}else
+                        {
+                             $reponses = $form->getValues();
+                            $reponses=$reponses[$form->getName()];
+                            foreach( $form->getMessages() as $message){
+                                
+                             
+                                    var_dump($message);
+                                
+                                
+                            }
+                            
+                        }
 		}
          
          
@@ -384,6 +419,49 @@ EOD;
     
     public function adduserAction(){
         
+         
+        
+        $id= $this->_getparam('id',0);
+        if($id){
+            $form = new Application_Form_User(array('edit'=>1));
+            $userModel=new Model_DbTable_User();
+            $user = $userModel->fetchRow('id = '.$id);
+            $form->populate($user->toArray());
+        }else{
+            
+            $form = new Application_Form_User();
+        }
+            
+         echo $form;
+          $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+       
+         
+    }
+    
+    public function deleteuserAction(){
+         $id= $this->_getparam('id',0);
+        if($id){
+             $users = new Model_DbTable_User();
+             $users->delete('id = '.$id);
+        }
+        $this->_redirect("/admin/userslist");
+        
+        
+    }
+    
+    
+    public function addusers2mapAction(){
+        
+        
+        $usermodel = new Model_DbTable_User();
+        
+        $user2add = array("userid"=> 1, "mapid"=> 5, "role"=> 1);
+        
+        $usermodel->affectMap2users(array($user2add));
+        
+        
+        $this->_redirect("/admin/userslist");
         
     }
     
