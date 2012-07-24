@@ -9,6 +9,7 @@ class Model_DbTable_User extends Zend_Db_Table_Abstract implements Zend_Acl_Role
     const MEMBER =0;
     const ADMIN =1;
     
+    
  
    public function getRoleId()
     {
@@ -25,6 +26,8 @@ class Model_DbTable_User extends Zend_Db_Table_Abstract implements Zend_Acl_Role
         
         return $user->role;
     }
+    
+    
 
     
     
@@ -50,8 +53,41 @@ class Model_DbTable_User extends Zend_Db_Table_Abstract implements Zend_Acl_Role
  
         return $stmt->fetchAll();
         
-        
+    }
     
+    public function isManager($user){
+        
+        $db = Zend_Db_Table::getDefaultAdapter();
+        
+        
+        $select = $db->select()->from("map2user")->where("userid=".$userid)->where('role='.Model_DbTable_User::ADMIN);
+        echo $select;
+        
+        $stmt =$db->query($select);
+        $row = $stmt->rowCount();
+ 
+        return $row->role;
+        
+        
+        
+    }
+    
+    public function getRoleForMap($userid,$mapid=0)
+    {
+        
+        $db = Zend_Db_Table::getDefaultAdapter();
+        
+        
+        $select = $db->select()->from("map2user")->where("userid=".$userid);
+        echo $select;
+        if($mapid)
+                $select->where("mapid=".$mapid);
+        
+        $stmt =$db->query($select);
+        $row = $stmt->fetch();
+ 
+        return $row->role;
+        
         
         
     }

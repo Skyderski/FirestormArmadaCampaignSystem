@@ -214,10 +214,10 @@ $output="";
                 
                 $output.= $this->view->ajaxLink("&nbsp;",
                     $url ,
-                    array('update' => '#elementdetailcontent',
+                    array('update' => '#modal .modal-body',
                             'class' => 'hexlink',
-                            'beforeSend' => "$('#elementdetailcontent').hide('slow');$('#elementdetail').hide('slow');$('.selected').removeClass('selected');$(this).addClass('selected');",
-                        'complete' => "$('#elementdetail').show('slow');$('#elementdetailcontent').show('fast');",
+                            'beforeSend' => "$('#modal').modal('hide');$('.selected').removeClass('selected');$(this).addClass('selected');",
+                        'complete' => "showModal();",
                             'title' => 'X'.$x.'Y'.$y));
                 
                 
@@ -225,7 +225,8 @@ $output="";
                  
                  
             }
-        
+            
+           
            
         }
          return $output;

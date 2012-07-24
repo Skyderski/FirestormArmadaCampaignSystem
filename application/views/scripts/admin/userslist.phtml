@@ -3,29 +3,19 @@
  
 
 ?>
-<div id="elementdetail">
-    <div class="elementdetailinner"> 
-        <a href="#" class="buttonclose" onclick="$('#elementdetail').hide('slow');">fermer</a>
-    
-    
-    <div id="elementdetailcontent">&nbsp;</div>
-    
-    <div style="clear:both;"></div> 
-    </div>
-    <div style="clear:both;"></div>
-</div>
+
 
 <div id="adminTable">
     
-    <?=$this->ajaxLink("Ajouter",
+    <?=$this->ajaxLink("<i class='icon-plus icon-white'></i>Ajouter",
                   $this->url(array('controller' => 'admin', 'action' => 'adduser')) ,
-                    array('update' => '#elementdetailcontent',
-                            'class' => 'hexlink',
+                    array('update' => '#modal .modal-body',
+                            'class' => 'btn btn-success',
                             'beforeSend' => "$('#elementdetailcontent').hide('slow');$('#elementdetail').hide('slow');",
-                        'complete' => "$('#elementdetail').show('slow');$('#elementdetailcontent').show('fast');",
+                        'complete' => "showModal();",
                           ));?>
    
-        <table class="adminlist">
+        <table class="table table-striped table-bordered table-condensed">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -54,19 +44,19 @@
                 <td><?echo $user->username;?></td>
                 <td> <? echo $user->email?>
                 <td>
-                    <a class="active<?echo $user->active; ?>" href="/admin/switchuseractivation/id/<?echo $user->id;?>">
-                    <?=($user->active)?"desactiver":"activer"?>
+                    <a class="active<?echo $user->active; ?> <?=($user->active)?"badge badge-success":"badge badge-important"; ?>" href="/admin/switchuseractivation/id/<?echo $user->id;?>">
+                    <?=($user->active)?"<i class='icon-ok icon-white'></i>":"<i class='icon-remove icon-white'></i>"?>
                     </a>    
                 </td>
                 <td>
                     <?=($user->role)?"Admin":"-"?>
                 </td>
                 <td>
-                    <a class="delete" href="/admin/deleteuser/id/<?echo $user->id;?>">delete</a>
-                     <?=$this->ajaxLink("Modifier",
+                    <a class="btn btn-danger" href="/admin/deleteuser/id/<?echo $user->id;?>"><i class='icon-trash icon-white'></i>delete</a>
+                     <?=$this->ajaxLink("<i class='icon-edit'></i>Modifier",
                         $this->url(array('controller' => 'admin', 'action' => 'adduser', 'id'=>$user->id)) ,
                             array('update' => '#elementdetailcontent',
-                            'class' => 'hexlink',
+                            'class' => 'btn',
                             'beforeSend' => "$('#elementdetailcontent').hide('slow');$('#elementdetail').hide('slow');",
                             'complete' => "$('#elementdetail').show('slow');$('#elementdetailcontent').show('fast');",
                           ));?>

@@ -42,6 +42,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 // fin de l'ajout
                 $view->addHelperPath(APPLICATION_PATH . "/../library/ZendX/JQuery/View/Helper", "ZendX_JQuery_View_Helper_");
                 
+                
+                
+                $view->layout()->title="Firestorm Armada Campaign Tool<br/>";
  
 
  
@@ -53,6 +56,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('view');
         $view = $this->getResource('view');
         $view->headLink()->appendStylesheet('/css/style.css');
+        $view->headLink()->appendStylesheet('/css/bootstrap/css/bootstrap.css');
+        
         
         
         

@@ -5,17 +5,17 @@
  * and open the template in the editor.
  */
 
-
 ?>
 
 
-<table class="adminlist">
+<table class="adminlist .table-condensed">
     <thead>
         <tr>
             <th>id</th>
             <th>nom</th>
             <th>taille <br/> (hauteur x largeur)</th>
             <th>background</th>
+            <th>Joueurs</th>
             <th>actif</th>
             <th>actions</th>
             
@@ -31,6 +31,7 @@
 if(count($this->mapList))
     foreach($this->mapList as $map){
     
+    $link2players=$this->url(array('controller' => 'manage', 'action' => 'player2map','id'=>$map->id),null,true);
     
     
     ?>
@@ -39,6 +40,7 @@ if(count($this->mapList))
         <td><a href="/admin/elementlist/mapid/<?=$map->id?>"><?echo $map->name;?></a></td>
         <td><?echo $map->height;?>x<?echo $map->width;?></td>
         <td><?echo $map->background;?></td>
+        <td><a href="<?=$link2players?>"><?echo $map->compteur;?></a></td>
         
         <td >
             <a class="active<?echo $map->active; ?>" href="/admin/switchactivation/mapid/<?echo $map->id;?>">

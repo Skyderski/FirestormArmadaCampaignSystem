@@ -5,7 +5,7 @@ class Model_DbTable_Map extends Zend_Db_Table_Abstract
     protected $_primary = 'id';
     
     
-    public function getAllMaps($identity=null){
+    public function getAllMaps($identity=null,$role=0){
         
         
         if($identity){
@@ -14,11 +14,18 @@ class Model_DbTable_Map extends Zend_Db_Table_Abstract
            
            $select = $this->select("maps")->setIntegrityCheck(false)->join('map2user', 'mapid=maps.id')
                    ->join("users",'map2user.userid=users.id');
+           
+           if($role)$select->where('map2user.role='.$role)->orWhere('users.role='.$role);
+           
         }else
         {
             
-            return $this->fetchAll();
+           $select = $this->select("maps")->columns(array("(select count(0) from map2user where id=map2user.mapid) as compteur"));
+         
+            
         }
+        
+        echo $select;
         
       return $this->fetchAll($select);
         

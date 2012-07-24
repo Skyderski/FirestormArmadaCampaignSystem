@@ -1,12 +1,13 @@
 
 
-<table class="adminlist">
+<table class="table table-striped table-bordered table-condensed">
     <thead>
         <tr>
             <th>id</th>
             <th>nom</th>
             <th>taille <br/> (hauteur x largeur)</th>
             <th>background</th>
+            <th>Joueurs</th>
             <th>actif</th>
             <th>actions</th>
             
@@ -30,6 +31,7 @@ if(count($this->mapList))
         <td><a href="/admin/elementlist/mapid/<?=$map->id?>"><?echo $map->name;?></a></td>
         <td><?echo $map->height;?>x<?echo $map->width;?></td>
         <td><?echo $map->background;?></td>
+        <td><?echo $map->compteur;?></td>
         <td >
             <a class="active<?echo $map->active; ?>" href="/admin/switchactivation/mapid/<?echo $map->id;?>">
             <?=($map->active)?"desactiver":"activer"?>

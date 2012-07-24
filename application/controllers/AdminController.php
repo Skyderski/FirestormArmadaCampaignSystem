@@ -17,12 +17,11 @@ class AdminController extends Zend_Controller_Action
             $identity = Zend_Auth::getInstance()->getIdentity();
             $userModel = new Model_DbTable_User();
             $role = $userModel->getRoleFromIdentity($identity);
-           if($role!=Model_DbTable_User::ADMIN){
+            if($role!=Model_DbTable_User::ADMIN){
              $this->_helper->redirector('index','login');
-           }
+             }
             
-              
-                
+                  
             }
             
              $this->view->layout()->toolbar = $this->view->toolbar();
@@ -457,6 +456,10 @@ EOD;
         $usermodel = new Model_DbTable_User();
         
         $user2add = array("userid"=> 1, "mapid"=> 5, "role"=> 1);
+        
+        $usermodel->affectMap2users(array($user2add));
+        
+         $user2add = array("userid"=> 4, "mapid"=> 5, "role"=> 1);
         
         $usermodel->affectMap2users(array($user2add));
         

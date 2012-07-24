@@ -38,212 +38,25 @@ root {
     display: block;
 }
 
-body{
-    margin:0;
-    padding:0;
-    font-size: 12px;
-    background-color:#000;
-    color:#fff;
-    background-image: url('/images/map/backgrounds/galaxie1.jpg') ;
-    background-attachment:fixed;
-    
-}
-
-a{
-    color:#fff;
-    
-}
 
 #header{
     height:100px;
-  /*  background: url('/images/common/hexa.png') ;*/
-    color:#fff;
-    font-size: 3em;
     
 }
 
-#toolbar{
-    
-    
-    background:#000;
-    padding : 0;
-    margin:0 0 20px 0;
-    text-align:right;
-    
-     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#157BC6), to(#05102E));
-    background-image: -moz-linear-gradient(0% 100% 90deg,#05102E,#157BC6);
-   border:1px solid #10E3FF;
-    border-left:0px;
-    border-right: 0;
-    
-    
-    
-}
-
-#toolbar ul {
-    
-    margin: auto;
-    padding:0;
-}
-#toolbar ul li{
-    display:inline;
-    padding:3px;
-   
-}
-#toolbar ul li a{
-  text-decoration: none;
-   font-family: NakadaiRegular;
-   font-size:0.9em;
-}
-
-#toolbar ul li:hover{
-  
-   color:#000;
-   /*#10E3FF*/
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0.1)), to(rgba(255,255,255,0.8)));
-    background-image: -moz-linear-gradient(0% 100% 90deg,rgba(255, 255, 255, 0.1),#10E3FF);
-    
-}
-
-#toolbar ul li:hover a{
-   
-   color:#000;
-}
 
 #content{
     padding : 0 20px;
     
 }
 
-
-.adminlist {
-    border:6px solid #8FADF9;
-    border-color:#FF1E00;   
-    
-    border-radius:15px 0px;
-    padding:5px;
-    margin: 5px;
-    
-    
-}
-.adminlist a{
-    color:#000;
-    
-    
-}
-
-.adminlist th {
-    background : #8FADF9;
-    background : #877B79;
-    
-}
-
-.adminlist td {
-    text-align: center;
-    
-}
-
-.adminlist tr {
-    
-    
-}
-.adminlist tr:nth-child(even) {
-    background: #ACC3FC;
-    background: #B49F9C;
-    color : #000;
-}
-.adminlist tr:nth-child(odd) {
-   background: #C1D2FC;
-   background: #DAC6C4;
-   color: #000
-
-}
-
-/* details des elements*/ 
-
-#elementdetail{
-    
-    position:fixed;
-    right:10px;
-    top:45px;
-    z-index: 300;
-    width:300px;
-    padding:5px;
-    border:6px solid #AF1100;
-    border-radius:15px 0px;   
-    background:#000;
-    display:none;
-   
-    
-}
-
-dt,dd{
-    
-    margin-left:2px;
-}
-dt{
-    width: 80px;
-    clear:both;
-}
-
-#coord-label{
-    display:none;
-    
-}
-#attributes-label{
-    display: none;
-}
-
-#coord-element{
-    clear:both;
-    float:left;
-    width:100%;
-    
-}
-
-#fieldset-coord {
-    margin:auto;
-    padding:2px;
-    width:95%;
-}
-#coord-element dt,#coord-element dd{
-    clear: none;
-    float:left;
-    width:24%;
-}
-
-#fieldset-attributes {
-    margin:auto;
-    padding:2px;
-    width:95%;
-}
-#attributes-element dt,#attributes-element dd{
-    clear: none;
-    float:left;
-    width:24%;
-}
-
-
-/* listes */
-
-#adminTable{
-    display:block;
-    
-}
-
-#adminTable h2{
-    font-size:1.2em;
-    color : #FF1E00;
-    
-}
-
-
-
+/* carte */
 .hexmap{
-    margin: 0;
-    border:6px solid #AF1100;
-    border-radius:15px 0px;   
-    background:#000;
+    border-radius:15px; 
+    border : none;
+    margin:auto;
+    margin-top:10px;
+    
 }
 
 .hex img{
@@ -253,63 +66,6 @@ dt{
 }
 
 
-#elementdetail .buttonclose{
-    background : transparent url('/images/icons/Knob Cancel.png');
-    background-size: 15px 15px;
-    width:15px;
-    display:block;
-    overflow: hidden;
-    color:transparent;
-    float:right;
-    
-}
-
-
-.hexmap , #elementdetail{
-
-   /* border-color:#54FFFF;/*
-    border-color:#3DE587;/*
-    border-color:#035673;
-   /*border-color: #03E8FF;*/
-   /*border-image:-webkit-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);*/
-   border:none;
-   border-radius:15px 0;
-}
-
-.hexmap{
-    border:none;
-}
-
-.hexmapborder,#elementdetail{
-       
-    background-color:#10E3FF;
-    background-image: radial-gradient(center top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
-    
-    background-color:#0F53B4;
-    background-image: -moz-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
-    background-image: -webkit-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
-    background-image: -o-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
-    background-image: -ms-radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
-    background-image: radial-gradient(30% top, ellipse  cover,#fff 1%, rgba(16, 227, 255, 1)10%, #0F53B4 100%);
-
-    
-    padding:2px 5px ;
-    width:auto;
-    border-radius:15px 0;
-    
-}
-
-.elementdetailinner{
-     border-radius:15px 0;
-    background:#000;
-    padding:5px;
-    margin:3px;
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#157BC6), to(#05102E));
-    background-image: -moz-linear-gradient(0% 100% 90deg,#05102E,#157BC6);
-    width:300px;
-
-    
-}
 
 
     

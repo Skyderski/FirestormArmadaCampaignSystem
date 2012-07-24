@@ -61,7 +61,7 @@ class IndexController extends Zend_Controller_Action
         $element = $modelElement->getElementFromCoordArray($mapid, $xCoord, $yCoord);
       
           
-      
+      $this->view->modaltitle = "test";
          echo $this->view->displayElement($element);
         
         
@@ -71,6 +71,14 @@ class IndexController extends Zend_Controller_Action
         
         
         
+    }
+    
+    public function profileAction(){
+        
+        echo "lol";
+       
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(TRUE);
     }
 
 

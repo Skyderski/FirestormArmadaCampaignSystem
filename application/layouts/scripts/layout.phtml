@@ -1,32 +1,71 @@
 <?php echo $this->doctype() ?>
 <html>
 <head>
-    <?php echo $this->headTitle() ?>
-    <?php echo $this->headLink() ?>
-    <?php echo $this->headStyle() ?>
-    <?php echo $this->headScript() ?>
+    
     <?php 
     echo $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8'); 
     
         
     ZendX_JQuery::enableView($this);
 
-    echo $this->jQuery()
-	->setVersion('1.5.1')
-	->setUiVersion('1.8.11')
-	->enable()
-	->uiEnable();
+    echo  $this->jQuery()
+                ->setVersion('1.7.2')
+                ->setUiVersion('1.8.21')
+                ->enable()
+                ->uiEnable();
+                
+           // twitter bootstrap
+    $this->headScript()->prependFile('/css/bootstrap/js/bootstrap.min.js');
     
+    
+    
+     $jScript=<<<EOD
+   
+            function showModal(){
+   
+            $('#modal .modal-title').html($('#modal .modal-title-hidden').html());
+         /*$('#modal .modal-header .modal-title').remove();
+         $('#modal .modal-title').clone().appendTo('#modal .modal-header');
+         $('#modal .modal-title').remove();
+         */
+
+         $('#modal').modal('show').fade('slow');
+}
+   
+EOD;
+        $this->headScript()->appendScript($jScript);
     
     ?>
+    <?php echo $this->headTitle() ?>
+    <?php echo $this->headLink() ?>
+    <?php echo $this->headStyle() ?>
+    <?php echo $this->headScript() ?>
 </head>
 <body>
-    <div id="header"><?php echo $this->layout()->title ?></div>
-    <div id="toolbar">
+    <div id="header">&nbsp;</div>
+    
         <?php echo $this->layout()->toolbar;?>
-    </div>
+    
     <div id="content">
+        
+        
     <?php echo $this->layout()->content ?>
      </div>
+    
+    
+    <div class="modal hide" id="modal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3 class="modal-title">&nbsp;</h3>
+        </div>
+        <div class="modal-body">
+            
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+            
+        </div>
+    </div>
+    
 </body>
 </html>

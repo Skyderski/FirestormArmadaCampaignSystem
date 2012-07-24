@@ -1,0 +1,22 @@
+<div class="link2map">
+    
+    
+    <ul>
+        <?
+        foreach( $this->mapList as $map){
+            
+            
+            $url = $this->url(array('controller' => 'index', 'action' => 'map', 'mapid' => $map->id));
+            echo "<li><a href='{$url}'>".$map->name."</a></li>";
+            
+            
+            
+        }
+        
+        ?>
+        
+    </ul>
+    
+   
+    
+</div>

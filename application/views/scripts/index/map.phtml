@@ -11,29 +11,20 @@ $this->headStyle()->appendStyle($mapData['style']);
 $this->headScript()->appendScript($mapData['script']);
 ?>       
 
+
+
     
-<div id="elementdetail">
-    <div class="elementdetailinner"> 
-        <a href="#" class="buttonclose" onclick="$('#elementdetail').hide('slow');">fermer</a>
-    
-    
-    <div id="elementdetailcontent">&nbsp;</div>
-    
-    </div>
-</div>
+
     
 
      <!-- Render the hex map inside of a div block -->
-    <div class="hexmapborder">
-        <div>
-            <div id='hexmap' class='hexmap'>
-         <?php echo $mapData['maphtml']; ?>
-            </div>
-
-        </div>
+   <div class="well">
         
+        <div id='hexmap' class='hexmap'>
+         <?php echo $mapData['maphtml']; ?>
+        </div>
         <div style="clear:both;"></div>
-    </div>
+   </div>
 
    
     
