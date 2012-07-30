@@ -5,38 +5,36 @@ class Model_DbTable_Map extends Zend_Db_Table_Abstract
     protected $_primary = 'id';
     
     
-    public function getAllMaps($identity=null,$role=0){
+    public function getAllMaps($role=0){
         
+        $identity = Zend_Auth::getInstance()->getIdentity();
         
         if($identity){
-            $userModel = new Model_DbTable_User();
-            $user = $userModel->getUserByName($identity);
-           
-           $select = $this->select("maps")->setIntegrityCheck(false)->join('map2user', 'mapid=maps.id')
-                   ->join("users",'map2user.userid=users.id');
-           
-           if($role)$select->where('map2user.role='.$role)->orWhere('users.role='.$role);
-           
-        }else
-        {
             
-           $select = $this->select("maps")->columns(array("(select count(0) from map2user where id=map2user.mapid) as compteur"));
-         
+            $usermodel = new Model_DbTable_User();
+            $user = $usermodel->fetchRow("username='$identity'");
             
+            if($user->role==Model_DbTable_User::ADMIN){
+                
+                return $this->fetchAll();
+            }
+            
+            $map2userModel = new Model_DbTable_Map2user();
+            $subselect = $map2userModel->select()->from('map2user','map2user.mapid as id')->where("userid={$user->id}");
+            
+            if($role)$subselect->where('map2user.role='.$role);
+            
+            $mapidsArray = array();
+           
+            return $this->fetchAll("id IN ($subselect)");
+           
         }
         
-        echo $select;
-        
-      return $this->fetchAll($select);
         
         
     }
     
-    public function eraseAll(){
         
-        // $this-> SHOW TABLES;
-    }
-    
     public function getMap($id)
     {
         $id = (int)$id;
@@ -64,9 +62,16 @@ class Model_DbTable_Map extends Zend_Db_Table_Abstract
     
     public function delMap($id){
         
+        $elements = new Model_DbTable_Element();
+        $elements->deleteAllElements($id);
+        
         $this->delete('id='.$id);
     }
     
+    
+    
+    
+   
     
 }
 ?>

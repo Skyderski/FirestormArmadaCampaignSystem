@@ -2,61 +2,11 @@
 
 class Zend_View_Helper_Toolbar extends Zend_View_Helper_Abstract{
 
-      
     public function toolbar(){
         
-        $identity = Zend_Auth::getInstance()->getIdentity();
-        $userModel = new Model_DbTable_User();
-        $role = $userModel->getRoleFromIdentity($identity);
+        $list = $this->renderListElement("main",0,"nav pull-right");
         
-         //$this->view->headScript()->prependScript("$(document).ready(function(){ $('.dropdown-toggle').dropdown() }");
        
-        
-        
-        $list ='<ul class="nav pull-right">';
-        
-        foreach($this->makeMainLinks($role) as $link){
-        
-            $url = $this->view->url(array('controller' => $link['controller'], 'action' => $link['action']),null,true);
-                
-            if($link["content"]){
-                
-                $sublist="";
-                foreach($link["content"] as $sublink){
-                    
-                    $suburl = $this->view->url(array('controller' => $sublink['controller'], 'action' => $sublink['action']),null,true);
-                    
-                    $sublist.="<li><a {$sublink['options']} href='{$suburl}'  >{$sublink['label']}</a></li>";
-                    
-                }
-                
-              $list.=<<<EOD
-                <li class="dropdown">
-                    <a href="#" data-target="#"
-                        class="dropdown-toggle"
-                        data-toggle="dropdown">
-                        {$link['label']}
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        {$sublist}                        
-                    </ul>
-                </li>    
-EOD;
-            }else{
-                
-                
-            $list .="<li><a {$link['options']} href='".$url."' >".$link['label']."</a>"
-                    
-                    
-                    ."</li>";
-            }
-        
-        }
-        
-        
-        
-        $list .="</ul>";
         
          $output=<<<EOD
             <div class="navbar navbar-fixed-top">
@@ -73,109 +23,136 @@ EOD;
    
 EOD;
         
-       
-        $output .="<ul class='gametoolbar'>";
+        echo $output;
         
-        foreach($this->makeGameLinks($role) as $link){
-        
-            $output .="<li><a href='".$link['url']."'>".$link['label']."</a></li>";
-        
-        }
-        
-        $output .="</ul>";
-        
-        
-        
-        return $output;
     }
     
-    public function makeMainLinks($role){
+    
+    public function renderListElement($category,$parent=0,$options){
         
-        $links = array();
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        
+        $userModel = new Model_DbTable_User();    
+        $menuModel = new Model_DbTable_Menu();
+        
+        
+        $select = $menuModel->select()->order("order ASC");
+        
+        $select->where("category='$category'")
+            ->where("parent=$parent")
+                ->where("active=1");
+          
+        if(!$identity)$select->where("role=-1");
+        else{
+              $user = $userModel->getUserByName($identity);
+            if($user->role==Model_DbTable_User::ADMIN)   // ADMIN
+                $select->where("role<=2");
+            elseif($userModel->isManager($user->id))    // Manager
+               $select->where("role<=1");
+            else $select->where("role<=0");             // joueur
+        }
+        
+                $list ="<ul class='$options'>";
+        
+        $menuList = $menuModel->fetchAll($select);
+        if(!$menuList->count())return false;
+        
+        foreach($menuList as $menu){
             
-        // home
-        $links[]= array('label'=>"Accueil",'controller' => 'index', 'action' => 'index');
-        
-        //profil
-        $links[]= array('label'=>"Profil",'controller' => 'index', 'action' => 'profil',
-            'options'=>"data-toggle='modal' data-target='#modal' id='profile'");
-        
-        $script=<<<EOD
-            $(document).ready(function(){
-                $("a#profile").click(function() { 
-                    $.get("/index/profile", {}, function(data, textStatus) { $("#modal .modal-body").html(data); }, "html");
+            if($menu->params)$params = $this->buildParams($menu->params);
+                $params['controller']=$menu->controller;
+                $params['action']= $menu->action;
 
-                    $('#modal').modal('show')
-                    return false; 
+            
+            if($this->isDynamic($menu))
+                $list.= $this->makeDynamicMenu($menu);
+            else{
+                //classic
+                
+                //if($params['dynamic'])
 
-                    });
+                $url =  $this->view->url($params,null,true);
 
-            });
- 
-        
+                    $sublist = $this->renderListElement($category,$menu->id,"dropdown-menu");
+                if($sublist){
+
+                    $list.=<<<EOD
+                        <li class="dropdown">
+                            <a href="#" data-target="#"
+                                class="dropdown-toggle"
+                                data-toggle="dropdown">
+                                {$menu->label}
+                                <b class="caret"></b>
+                            </a>
+                                {$sublist}                        
+
+                        </li>    
 EOD;
+
+                }else{
+                    $list .="<li><a href='$url' >{$menu->label}</a></li>";
+                }
+
+            }
+        }
         
-        $this->view->headScript()->offsetSetScript(100,$script);
-       
+         $list .="</ul>";
+        return $list;
         
+    }
+    
+    public function buildParams($textParams){
         
-        if($role==Model_DbTable_User::ADMIN)
-        {
-           $links[]= array('label'=>"Administration",'controller' => 'admin', 'action' => 'index',"content"=>$this->makeAdminLinks($role));
+        // format :
+        // cle:valeur\n
+        
+        $coupleArray = explode("\n", $textParams);
+        $params = array();
+        foreach($coupleArray as $couple){
+            
+            $values = explode(":", $couple);
+            $params[$values[0]]=$values[1];
             
         }
         
-        $links[]= array('label'=>"Gestion",'controller' => 'manage', 'action' => 'index',"content"=>$this->makeManageLinks());
         
-        
-        
-        // logout
-        $links[]= array('label'=>"Déconnection",'controller' => 'login', 'action' => 'logout');
-        
-        
-       // 
-        
-        
-        
-        return $links;
+        return $params;
         
     }
     
-     public function makeGameLinks($role){
-        
-        $links = array();
-            
-       
-        return $links;
+    public function isDynamic($menu){
+        $regexp="/#.*$/";
+        return preg_match($regexp, $menu->label, $matches);
         
     }
     
-    public function makeManageLinks(){
-        $links = array();
-       
+    
+    public function makeDynamicMenu($menu){
+        
+        
+        switch($menu->label){
             
-        // home
-        $links[]= array('label'=>"Utilisateurs",'controller' => 'manage', 'action' => 'userslist');
+            case '#MANAGE_MAP' :
+                $mapModel = new Model_DbTable_Map();
+                $maplist = $mapModel->getAllMaps(Model_DbTable_User::ADMIN);
+                if($maplist->count()){
+                    $list .="<li class='divider'></li>";
+                    foreach($maplist as $map)
+                    {
+                        $url =  $this->view->url(array('controller'=>'manage','action'=>'map','mapid'=>$map->id),null,true);
+                        $list .="<li><a href='$url' >{$map->name}</a></li>";
+                    }
+                }
+                break;
+           default: return false;
+               break;
+                
+        }
+                
+                return $list;
         
-        //profil
-        $links[]= array('label'=>"Cartes",'controller' => 'manage', 'action' => 'maplist');
-        
-         return $links;
     }
     
-    public function makeAdminLinks($role){
-        
-        $links = array();
-            
-        // home
-        $links[]= array('label'=>"Utilisateurs",'controller' => 'admin', 'action' => 'userslist');
-        
-        //profil
-        $links[]= array('label'=>"Cartes",'controller' => 'admin', 'action' => 'maplist');
-        
-        
-        return $links;
-        
-    }
+  
   
 }

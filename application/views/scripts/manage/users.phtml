@@ -1,0 +1,117 @@
+<?  $this->message()?>
+
+<div id="adminTable">
+    
+    <?=$this->ajaxLink("<i class='icon-plus icon-white'></i>Ajouter",
+                  $this->url(array('controller' => 'manage', 'action' => 'adduser','mapid'=>$this->mapid),null,true) ,
+                    array('update' => '#modal .modal-body',
+                            'class' => 'btn btn-success',
+                            'beforeSend' => "",
+                            'complete' => "showModal();",
+                          ));?>
+   
+        <table class="table table-striped table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Faction</th>
+                    <th>Ressources</th>
+                    
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+
+
+
+        <?php
+$userModel = new Model_DbTable_User();
+$fleetModel = new Model_DbTable_Fleet();
+$factionModel = new Model_DbTable_Factions();
+        if(count($this->list))
+            foreach($this->list as $user){
+
+            
+
+
+            ?>
+            <tr>
+                <td><?echo $user->id;?></td>
+                <td>
+                    <?
+                    
+                    if($user->role==Model_DbTable_User::ADMIN){
+                       echo "<i class='icon-certificate' title='Administrateur'></i>";
+                        
+                    }
+                    echo "$user->username";
+                    
+                   
+                    
+                    ?>
+                </td>
+                <td> <? echo $user->email?></td>
+                
+                <td>
+                    <?
+                    if($user->mapRole==Model_DbTable_User::ADMIN)
+                        echo "Manager";
+                    else
+                        echo "-";
+                    
+                    ?>
+                    
+                </td>
+                <td> <? 
+                
+                
+                echo $user->factionName;
+                        
+                        ?></td>
+                <td> <? echo $user->ressources?></td>
+                <td><div class="btn-group">
+                        
+                        <?
+                      
+                        if($this->currentUser->role == Model_DbTable_User::ADMIN)
+                        {
+                        ?>
+                        <a class="btn btn-danger" href="<?=$this->url(array('controller'=>"manage","action"=>"removeuser","mapid"=>$this->mapid,"userid"=>$user->id),null,true);?>"><i class='icon-trash icon-white'></i> Supprimer</a>
+                        <?
+            }
+            ?>
+
+                         <? 
+                         
+                            if(($this->currentUser->role == Model_DbTable_User::ADMIN) || ($user->id!= $this->currentUser->id)){
+                               if($user->mapRole==Model_DbTable_User::ADMIN){
+                                   ?>
+                                    <a class="btn" href="<?=$this->url(array('controller'=>"manage","action"=>"unmakemanager","mapid"=>$this->mapid,"userid"=>$user->id),null,true);?>"><i class='icon-user'></i> Retirer Gestion</a>           
+                               <?
+                                           
+                               }else{ ?>
+                                    <a class="btn" href="<?=$this->url(array('controller'=>"manage","action"=>"makemanager","mapid"=>$this->mapid,"userid"=>$user->id),null,true);?>"><i class='icon-user'></i> Promouvoir Manager</a>
+                        
+                            <?        }
+                            }
+                        ?>
+                    </div>
+                </td>
+
+            </tr>
+
+            <?php
+            }
+
+        ?>
+
+
+
+        </table>
+</div>
+
+<div class="clear:both"></div>

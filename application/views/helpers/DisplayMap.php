@@ -168,7 +168,7 @@ EOD;
         
 $output="";
 
-
+$outputScript="";
 
         // -------------------------------------------------------------
         // --- Draw each hex in the map
@@ -201,7 +201,14 @@ $output="";
                  
                     
                     $currentElement = $elementsArray[$x][$y];
-                    $output.= "<img title='X{$x}Y{$y}' src='/images/elements/".$currentElement->image."' alt='$terrain' class='' style='zindex:99;'/>\n";
+                    $output.= "<img title='X{$x}Y{$y}' data-content='lol' src='/images/elements/".$currentElement->image."' alt='$terrain' class='' style='zindex:99;'/>\n";
+                    
+                    
+                    $elementDetail = $this->view->displayElement($currentElement);
+                    
+                    $outputScript.= "$('#X{$x}Y{$y} a').popover({'delay':{show : 100 , hide : 500} , 'trigger' : 'manual' , 'content' : ' ".trim( preg_replace( '/\s+/', ' ', $elementDetail ) )  ." ', title : '{$currentElement['name']}' });";
+                    
+                    
                 }
                 
                 
@@ -212,15 +219,18 @@ $output="";
                 
                 $url ="/".$controllerName."/elementshow/mapid/".$map->id."/xcoord/".$x."/ycoord/".$y;
                 
+                
+                $output.="<a href='#' id='X{$x}Y{$y}link' class='hexlink'>&nbsp;</a>";
+                /*
                 $output.= $this->view->ajaxLink("&nbsp;",
                     $url ,
-                    array('update' => '#modal .modal-body',
+                    array(
                             'class' => 'hexlink',
-                            'beforeSend' => "$('#modal').modal('hide');$('.selected').removeClass('selected');$(this).addClass('selected');",
-                        'complete' => "showModal();",
-                            'title' => 'X'.$x.'Y'.$y));
-                
-                
+                            'beforeSend' => "$('.selected').removeClass('selected');$(this).addClass('selected');",
+                            'complete' => "$('#X{$x}Y{$y}').popover({'content': data, 'delay': { show: 500, hide: 100 }});"
+                            ));
+                */
+               
                 $output.= "</div>";
                  
                  
@@ -229,6 +239,15 @@ $output="";
            
            
         }
+        
+        $outputScript.= "\n$('.hexlink').hover(function(){ $(this).popover('show')},function(){ if(lastclick!=$(this).attr('id')) $(this).popover('hide')});\n";
+        
+        $outputScript.= "$('.hexlink').click(function(){ $('.selected').removeClass('selected');$(this).addClass('selected');$('#'+lastclick).popover('hide');lastclick=$(this).attr('id')  ;return false;});";
+        
+        
+        
+        
+        $this->view->headScript()->appendScript("var lastclick=''; $(document).ready(function(){ ".$outputScript."});");
          return $output;
     
         

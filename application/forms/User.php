@@ -3,16 +3,24 @@ class Application_Form_User extends Zend_Form
 {
 	
 	protected $_id=0;
-        protected $_isEdit=0;   
+        protected $_isEdit=0; 
+        protected $_activate=0;
+        protected $_email="";
+        
     
  	public function __construct($options = null)
     {
-    	if($options['id']){
+            if($options['id']){
     		$this->_id= $options['id'];
     	}
         if($options['edit']){
             $this->_isEdit=1;
         }
+        if($options['activate'])
+            $this->_activate=1;
+        
+        if($options['email'])
+            $this->_email=$options['email'];
         
         
     	parent::__construct($options);
@@ -30,13 +38,13 @@ class Application_Form_User extends Zend_Form
 	
         $id = new Zend_Form_Element_Hidden('id');
         $id->setDecorators(array('ViewHelper'));
-		$form[] = $id;
+		
                 
         $edit= new Zend_Form_Element_Hidden('edit');
         $edit->setValue($this->_isEdit)
                 ->setDecorators(array('ViewHelper'));;
         
-      $form[] = $edit;
+      
        		
         $name = new Zend_Form_Element_Text('username');
         $name->setLabel('Nom d\'utilisateur*')
@@ -49,11 +57,8 @@ class Application_Form_User extends Zend_Form
               ->addValidator('NotEmpty')
                    ->addFilter('StringToLower');
         
-        if(!$this->_isEdit){
-            
             $name->addValidator( new Zend_Validate_Db_NoRecordExists(array('table'=>'users','field'=>'username')));
-        }
-         $form[] =$name;
+        
 
          
          $password = new Zend_Form_Element_Password('password');
@@ -62,29 +67,43 @@ class Application_Form_User extends Zend_Form
                  ->addFilter('StripTags')
                  ->addValidator ( new Zend_Validate_StringLength(6,20) )		
                  ->addValidator('NotEmpty');
-          $form[] =$password;
+         
           
           $email = new Zend_Form_Element_Text('email');
           $email->setLabel('e-mail*')
                   ->addValidator(new Zend_Validate_EmailAddress());
-          $form[] =$email;
+          
+         
+          
           
         $isAdmin= new Zend_Form_Element_Checkbox('role');
 	$isAdmin->setLabel('Admin')->setValue(0);
-	$form[] =	$isAdmin;
+	
+         
             
         
         	
 		$cbActive= new Zend_Form_Element_Checkbox('active');
 		$cbActive->setLabel('Actif')->setValue(1);
-		$form[] =	$cbActive;
+		
 		
 		
         $envoyer = new Zend_Form_Element_Submit('envoyer');
         $envoyer->setAttrib('id', 'boutonenvoyer');
         $envoyer->setAttrib('class', 'bt_connexion');
 		//$formulaireElement[] =$envoyer;
-		
+	
+        $form[] = $id;
+        
+        $form[] = $edit;
+         $form[] =$name;
+         $form[] =$password;
+         $form[] =$email;
+         if(!$this->_activate){
+            $form[] =	$isAdmin;
+            $form[] =	$cbActive;
+        }
+        
         $this->addElements($form);
         
          $this->addElements(array($envoyer));

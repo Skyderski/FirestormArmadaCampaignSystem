@@ -28,12 +28,12 @@ if(count($this->mapList))
     ?>
     <tr>
         <td><?echo $map->id;?></td>
-        <td><a href="/admin/elementlist/mapid/<?=$map->id?>"><?echo $map->name;?></a></td>
+        <td><a href="/manage/map/mapid/<?=$map->id?>"><?echo $map->name;?></a></td>
         <td><?echo $map->height;?>x<?echo $map->width;?></td>
         <td><?echo $map->background;?></td>
-        <td><?echo $map->compteur;?></td>
+        <td><?//echo $map->compteur;?></td>
         <td >
-            <a class="active<?echo $map->active; ?>" href="/admin/switchactivation/mapid/<?echo $map->id;?>">
+            <a class="active<?echo $map->active; ?>" href="/admin/togglemap/mapid/<?echo $map->id;?>">
             <?=($map->active)?"desactiver":"activer"?>
             </a>    
         </td>

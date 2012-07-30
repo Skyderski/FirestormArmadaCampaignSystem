@@ -29,28 +29,35 @@
 
 }
 
-#header,h1,h2,h3{
+body{
+    padding-top: 70px;
+    
+}
+header h1 {
     font-family: NakadaiRegular;
     
 }
+
+
 
 root { 
     display: block;
 }
 
 
-#header{
-    height:100px;
-    
-}
 
-
-#content{
-    padding : 0 20px;
+.brand,.modal-title{
+     font-family: NakadaiRegular;
     
 }
 
 /* carte */
+
+.well {
+    
+    overflow-x: auto;
+}
+
 .hexmap{
     border-radius:15px; 
     border : none;

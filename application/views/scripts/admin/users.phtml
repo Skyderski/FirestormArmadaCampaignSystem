@@ -44,22 +44,30 @@
                 <td><?echo $user->username;?></td>
                 <td> <? echo $user->email?>
                 <td>
-                    <a class="active<?echo $user->active; ?> <?=($user->active)?"badge badge-success":"badge badge-important"; ?>" href="/admin/switchuseractivation/id/<?echo $user->id;?>">
+                    <a class="active<?echo $user->active; ?> <?=($user->active)?"badge badge-success":"badge badge-important"; ?>" 
+                        href="<?= $this->url(array('controller'=>'admin','action'=>'toggleuser','mapid'=>$this->mapid,'id'=>$user->id),null,true ); ?>">
                     <?=($user->active)?"<i class='icon-ok icon-white'></i>":"<i class='icon-remove icon-white'></i>"?>
                     </a>    
                 </td>
                 <td>
                     <?=($user->role)?"Admin":"-"?>
                 </td>
-                <td>
-                    <a class="btn btn-danger" href="/admin/deleteuser/id/<?echo $user->id;?>"><i class='icon-trash icon-white'></i>delete</a>
-                     <?=$this->ajaxLink("<i class='icon-edit'></i>Modifier",
-                        $this->url(array('controller' => 'admin', 'action' => 'adduser', 'id'=>$user->id)) ,
-                            array('update' => '#elementdetailcontent',
-                            'class' => 'btn',
-                            'beforeSend' => "$('#elementdetailcontent').hide('slow');$('#elementdetail').hide('slow');",
-                            'complete' => "$('#elementdetail').show('slow');$('#elementdetailcontent').show('fast');",
-                          ));?>
+                <td><div class="btn-group">
+                        <a class="btn btn-danger" href="/admin/deleteuser/id/<?echo $user->id;?>"><i class='icon-trash icon-white'></i>delete</a>
+                        <?=$this->ajaxLink("<i class='icon-edit'></i>Modifier",
+                            $this->url(array('controller' => 'admin', 'action' => 'adduser', 'id'=>$user->id)) ,
+                                array('update' => '#modal .modal-body',
+                                'class' => 'btn',
+                                'beforeSend' => "$('#elementdetailcontent').hide('slow');$('#elementdetail').hide('slow');",
+                                'complete' => "showModal()",
+                            ));?>
+                        <a class="btn"
+                           href="<?= $this->url(array('controller'=>'admin','action'=>'toggleadmin','id'=>$user->id),null,true ); ?>">
+                           <i class='icon-certificate'></i>Admin</a>
+                        
+                        
+                        
+                    </div>
                 </td>
 
             </tr>

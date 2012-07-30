@@ -44,7 +44,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 
                 
                 
-                $view->layout()->title="Firestorm Armada Campaign Tool<br/>";
+                $view->layout()->title="Firestorm Armada<br/>Campaign Tool<br/>";
  
 
  
@@ -57,6 +57,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view = $this->getResource('view');
         $view->headLink()->appendStylesheet('/css/style.css');
         $view->headLink()->appendStylesheet('/css/bootstrap/css/bootstrap.css');
+        $view->headLink()->appendStylesheet('/css/bootstrap/css/bootstrap-responsive.css',null);
         
         
         

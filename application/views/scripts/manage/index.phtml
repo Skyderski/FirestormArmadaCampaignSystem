@@ -1,22 +1,75 @@
-<div class="link2map">
+
+
+<table class="table table-striped table-bordered table-condensed">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>nom</th>
+            <th>taille <br/> (hauteur x largeur)</th>
+            <th>background</th>
+            <th>Manager</th>
+            <th>Joueurs</th>
+            <th>actif</th>
+            <th>actions</th>
+            
+        </tr>
+        
+    </thead>
     
     
-    <ul>
-        <?
-        foreach( $this->mapList as $map){
-            
-            
-            $url = $this->url(array('controller' => 'index', 'action' => 'map', 'mapid' => $map->id));
-            echo "<li><a href='{$url}'>".$map->name."</a></li>";
-            
-            
-            
-        }
+
+
+<?php
+
+$userModel = new Model_DbTable_User();
+$mapModel = new Model_DbTable_Map();
+$map2userModel = new Model_DbTable_Map2user();
+
+if(count($this->mapList))
+    foreach($this->mapList as $map){
+    
+    
+   $manager = $userModel->getManager($map);
+    
+    ?>
+    <tr>
+        <td><?echo $map->id;?></td>
+        <td><a href="/manage/map/mapid/<?=$map->id?>"><?echo $map->name;?></a></td>
+        <td><?echo $map->height;?>x<?echo $map->width;?></td>
+        <td><?echo $map->background;?></td>
+        <td><?echo $manager->username;?></td>
+        <td><?echo $map2userModel->getPlayerNumber($map);?></td>
+        <td >
+            <a class="<?=($map->active)?"badge badge-success":"badge badge-important"; ?>" href="/manage/togglemap/id/<?echo $map->id;?>">
+                    <?=($map->active)?"<i class='icon-ok icon-white'></i>":"<i class='icon-remove icon-white'></i>"?>
+                    </a>    
+        </td>
+        <td>
+              <div class="btn-group">
+                                   
+                    <?=$this->ajaxLink("<i class='icon-edit'></i> Modifier",
+                        $this->url(array('controller' => 'manage', 'action' => 'mapshow', 'mapid'=>$map->id)) ,
+                            array('update' => '#modal .modal-body',
+                            'class' => 'btn',
+                            'beforeSend' => "$('#elementdetailcontent').hide('slow');$('#elementdetail').hide('slow');",
+                            'complete' => "showModal()",
+                          ));?>
+                  
+                        <a class="btn" href="<?=$this->url(array('controller'=>"manage","action"=>"users","mapid"=>$map->id),null,true);?>"><i class='icon-user'></i> Joueurs</a>
+                       
+              </div>
+        </td>
         
-        ?>
-        
-    </ul>
+    </tr>
+    
+    <?php
+    }
+ 
+ 
+ 
+ 
+ ?>
+
     
    
-    
-</div>
+</table>

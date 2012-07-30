@@ -1,6 +1,6 @@
 <?php
 
-class Model_DbTable_User extends Zend_Db_Table_Abstract implements Zend_Acl_Role_Interface
+class Model_DbTable_User extends Zend_Db_Table_Abstract 
 {
     protected $_name = 'users';
     protected $_primary = 'id';
@@ -11,14 +11,6 @@ class Model_DbTable_User extends Zend_Db_Table_Abstract implements Zend_Acl_Role
     
     
  
-   public function getRoleId()
-    {
-        if ($this->_aclRoleId == null) {
-            return 'guest';
-        }
- 
-        return $this->_aclRoleId;
-    }
     
     public function getRoleFromIdentity($identity){
         
@@ -28,49 +20,33 @@ class Model_DbTable_User extends Zend_Db_Table_Abstract implements Zend_Acl_Role
     }
     
     
+    public function isManager($userid,$mapid=0){
+        
+        $db = Zend_Db_Table::getDefaultAdapter();
+        
+        $map2userModel = new Model_DbTable_Map2user();
+        $adminRole = Model_DbTable_User::ADMIN;
+        
+        $select = $map2userModel->select()->where("userid={$userid}")->where("role={$adminRole}");
+        
+        
+        if($mapid)$select->where("mapid={$mapid}");
 
-    
-    
-    public function getAllUsers(){
-        
-        return $this->fetchAll();
-        
+        return $map2userModel->fetchAll($select)->count();
         
     }
     
-    public function getAllUsersByMap($mapid){
+    
+    
+    public function getCurrentUser(){
         
-        $db = Zend_Db_Table::getDefaultAdapter();
+        $identity = Zend_Auth::getInstance()->getIdentity();
         
-        $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART)
-                        ->setIntegrityCheck(false);
-        $select->join('map2user',
-        'map2user.userid= users.id')
-            ->where('mapid='.$mapid);
-        
-        $stmt =$db->query($select);
-        
- 
-        return $stmt->fetchAll();
+        return $this->getUserByName($identity);
         
     }
     
-    public function isManager($user){
-        
-        $db = Zend_Db_Table::getDefaultAdapter();
-        
-        
-        $select = $db->select()->from("map2user")->where("userid=".$userid)->where('role='.Model_DbTable_User::ADMIN);
-        echo $select;
-        
-        $stmt =$db->query($select);
-        $row = $stmt->rowCount();
- 
-        return $row->role;
-        
-        
-        
-    }
+    
     
     public function getRoleForMap($userid,$mapid=0)
     {
@@ -79,7 +55,7 @@ class Model_DbTable_User extends Zend_Db_Table_Abstract implements Zend_Acl_Role
         
         
         $select = $db->select()->from("map2user")->where("userid=".$userid);
-        echo $select;
+        
         if($mapid)
                 $select->where("mapid=".$mapid);
         
@@ -106,7 +82,7 @@ class Model_DbTable_User extends Zend_Db_Table_Abstract implements Zend_Acl_Role
     {
         $row = $this->fetchRow('username = "' . $username.'"');
         if (!$row) {
-            throw new Exception("Count not find row $id");
+            throw new Exception("Count not find row $username");
         }
         return $row ;
     }   
@@ -129,37 +105,81 @@ class Model_DbTable_User extends Zend_Db_Table_Abstract implements Zend_Acl_Role
     }
     
     
-    public function affectMap2users($data){
+    public function addUserToMap($mapid,$userid,$role=0){
         
        $map2user= new Model_DbTable_Map2user();
-       foreach($data as $currentAffectation){
+       
+       if(!$map2user->fetchRow("userid={$userid} AND mapid={$mapid}"))
+       {
+       
+         $map2user->insert(array("userid"=>$userid,
+                "mapid"=>$mapid,
+                "role"=>$role,
             
-            
-            $map2user->insert(array("userid"=>$currentAffectation['userid'],
-                "mapid"=>$currentAffectation['mapid'],
-                "role"=>$currentAffectation['role']
+             "ressources"=>0,
+             "faction"=>0
                 ));
-            
+          
             
         }
         
+        
+        
     }
+    
+    public function getPlayers($mapid){
+         
+        $db = Zend_Db_Table::getDefaultAdapter();
+        
+        $map2userModel = new Model_DbTable_Map2user();
+        
+        $select = $this->select()->setIntegrityCheck(false)->from('users','users.*')
+                ->joinLeft('map2user',"users.id=map2user.userid",array("ressources","faction","role as mapRole"))
+                ->joinLeft('factions',"map2user.faction=factions.id",array("factions.name as factionName","logo as factionLogo","logo_small as factionLogo_small" ))
+                ->where('map2user.userid=users.id')
+                ->order("mapRole DESC");
+        
+       // echo $select;
+        return $this->fetchAll($select);
+        
+    
+            
+     }
+    
+     public function getManager($map){
+        
+        $map2userModel = new Model_DbTable_Map2user();
+        
+        $roleManager = Model_DbTable_User::ADMIN;
+        $subselect = $map2userModel->select()->from('map2user','map2user.userid as id')->where("mapid={$map->id} AND role={$roleManager}");
+            
+        return $this->fetchRow("id IN ($subselect)");
+    }
+    
+      
     
     
 }
-?>
-
-<?php
-
 
 class Model_DbTable_Map2user extends Zend_Db_Table_Abstract
 {
     protected $_name = 'map2user';
  
+    public function getPlayerNumber($map){
+        return count($this->fetchAll("mapid={$map->id}"));
+        
+    }
+    
     
     
 }
 
-
+class Model_DbTable_Menu extends Zend_Db_Table_Abstract
+{
+    protected $_name = 'menu';
+ 
+   
+    
+}
 
 ?>

@@ -1,7 +1,7 @@
 <?php echo $this->doctype() ?>
 <html>
 <head>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php 
     echo $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8'); 
     
@@ -24,12 +24,7 @@
             function showModal(){
    
             $('#modal .modal-title').html($('#modal .modal-title-hidden').html());
-         /*$('#modal .modal-header .modal-title').remove();
-         $('#modal .modal-title').clone().appendTo('#modal .modal-header');
-         $('#modal .modal-title').remove();
-         */
-
-         $('#modal').modal('show').fade('slow');
+            $('#modal').modal('show');
 }
    
 EOD;
@@ -42,12 +37,22 @@ EOD;
     <?php echo $this->headScript() ?>
 </head>
 <body>
-    <div id="header">&nbsp;</div>
     
-        <?php echo $this->layout()->toolbar;?>
+    <?php echo $this->layout()->toolbar;?>
     
-    <div id="content">
+  
+    
         
+    
+    <div class="container">
+          
+    <header class="jumbotron subhead" id="overview">
+  <h1><?php echo $this->layout()->subtitle;?></h1>
+  <p class="lead"><?php echo $this->layout()->summary;?></p>
+  <div class="subnav">
+    <?php echo $this->layout()->subnav;?>
+  </div>
+</header>
         
     <?php echo $this->layout()->content ?>
      </div>
@@ -62,7 +67,7 @@ EOD;
             
         </div>
         <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal">Close</a>
+            <!--<a href="#" class="btn" data-dismiss="modal">Close</a>-->
             
         </div>
     </div>

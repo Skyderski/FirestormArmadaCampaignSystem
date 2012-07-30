@@ -15,9 +15,8 @@ class InitController extends Zend_Controller_Action
           $db = Zend_Db_Table::getDefaultAdapter();
          
           $sql=<<<EOD
-     
 
-
+   DROP TABLE IF EXISTS `maptouser`;
 
 DROP TABLE IF EXISTS `elements`;
 CREATE TABLE `elements` (
@@ -35,15 +34,51 @@ CREATE TABLE `elements` (
   `active` int(10) unsigned NOT NULL,
   `status` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=871 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 --
--- Dumping data for table `elements`
+-- Definition of table `factions`
 --
 
-/*!40000 ALTER TABLE `elements` DISABLE KEYS */;
-/*!40000 ALTER TABLE `elements` ENABLE KEYS */;
+DROP TABLE IF EXISTS `factions`;
+CREATE TABLE `factions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `logo` varchar(45) DEFAULT NULL,
+  `logo_small` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `factions`
+--
+
+
+INSERT INTO `factions` (`id`,`name`,`logo`,`logo_small`) VALUES 
+ (1,'Aquan Prime',NULL,NULL),
+ (2,'Dindrenzi Federation',NULL,NULL),
+ (3,'Sorylian Collective',NULL,NULL),
+ (4,'Terran Alliance',NULL,NULL),
+ (5,'The Directorate',NULL,NULL),
+ (6,'The Relthoza',NULL,NULL),
+ (7,'Alliance of Kurak',NULL,NULL),
+ (8,'Zenian League',NULL,NULL);
+
+
+--
+-- Definition of table `fleet`
+--
+
+DROP TABLE IF EXISTS `fleet`;
+CREATE TABLE `fleet` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` int(10) unsigned NOT NULL,
+  `mapid` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `map2user`
@@ -51,22 +86,14 @@ CREATE TABLE `elements` (
 
 DROP TABLE IF EXISTS `map2user`;
 CREATE TABLE `map2user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `mapid` int(10) unsigned NOT NULL,
   `userid` int(10) unsigned NOT NULL,
   `role` int(10) unsigned NOT NULL,
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `map2user`
---
-
-/*!40000 ALTER TABLE `map2user` DISABLE KEYS */;
-INSERT INTO `map2user` (`mapid`,`userid`,`role`,`id`) VALUES 
- (5,1,1,1),
- (5,4,1,3);
-/*!40000 ALTER TABLE `map2user` ENABLE KEYS */;
+  `faction` int(10) unsigned DEFAULT NULL,
+  `ressources` int(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 --
@@ -77,23 +104,60 @@ DROP TABLE IF EXISTS `maps`;
 CREATE TABLE `maps` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
+  `description` text,
   `width` int(10) unsigned NOT NULL,
   `height` int(10) unsigned NOT NULL,
   `active` int(10) unsigned NOT NULL,
   `background` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 --
--- Dumping data for table `maps`
+-- Definition of table `menu`
 --
 
-/*!40000 ALTER TABLE `maps` DISABLE KEYS */;
-INSERT INTO `maps` (`id`,`name`,`width`,`height`,`active`,`background`) VALUES 
- (3,'Carte de test',50,50,1,'starfiel.gif'),
- (4,'carte 30x30',30,30,1,'starfiel.gif'),
- (5,'carte ce soir',15,15,1,'starfiel.gif');
-/*!40000 ALTER TABLE `maps` ENABLE KEYS */;
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE `menu` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `label` varchar(45) NOT NULL,
+  `category` varchar(45) NOT NULL,
+  `controller` varchar(45) DEFAULT NULL,
+  `action` varchar(45) DEFAULT NULL,
+  `params` varchar(45) DEFAULT NULL,
+  `order` int(10) unsigned DEFAULT NULL,
+  `role` float DEFAULT NULL,
+  `parent` int(10) unsigned DEFAULT NULL,
+  `active` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `menu`
+--
+INSERT INTO `menu` (`id`,`label`,`category`,`controller`,`action`,`params`,`order`,`role`,`parent`,`active`) VALUES 
+ (3,'Accueil','main','index',NULL,NULL,0,-1,0,1),
+ (4,'D&eacute;connexion','main','login','logout',NULL,100,0,0,1),
+ (5,'Gestion','main','manage',NULL,NULL,1,1,0,1),
+ (6,'Campagnes','main','manage','index',NULL,0,1,5,1),
+ (7,'Administration','main','admin','index',NULL,2,2,0,1),
+ (8,'Campagnes','main','admin','maps',NULL,0,2,7,1),
+ (9,'Utilisateurs','main','admin','users',NULL,1,2,7,1),
+ (10,'#MANAGE_MAP','main','manage','map','dynamic:mapid\r\nmapid:#MAP_ID',1,1,5,1);
+
+
+--
+-- Definition of table `models`
+--
+
+DROP TABLE IF EXISTS `models`;
+CREATE TABLE `models` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `factionid` int(10) unsigned NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `points` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 --
@@ -109,17 +173,7 @@ CREATE TABLE `session` (
   `lifetime` int(11) DEFAULT NULL,
   `session_data` text,
   PRIMARY KEY (`session_id`,`save_path`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `session`
---
-
-/*!40000 ALTER TABLE `session` DISABLE KEYS */;
-INSERT INTO `session` (`session_id`,`save_path`,`name`,`modified`,`lifetime`,`session_data`) VALUES 
- ('bv5r2nivbkj2q239l2j4pravp7','\\xampp\\tmp','PHPSESSID',1343137590,1440,'Zend_Auth|a:1:{s:7:\"storage\";s:5:\"admin\";}');
-/*!40000 ALTER TABLE `session` ENABLE KEYS */;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `users`
@@ -128,44 +182,24 @@ INSERT INTO `session` (`session_id`,`save_path`,`name`,`modified`,`lifetime`,`se
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
+  `username` varchar(50) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
   `email` varchar(150) DEFAULT NULL,
-  `active` int(10) unsigned NOT NULL,
+  `active` int(10) unsigned DEFAULT NULL,
   `role` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `users`
---
-
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`,`username`,`password`,`email`,`active`,`role`) VALUES 
- (1,'admin','2eb800914b6b1b7eb3eb2679b5f50a40','antoine@gmail.com',1,1),
- (4,'vulkan','6bffab515fc47ab83e4283941fdd1042','guillaume.larcheveque@gmail.com',1,1);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
 EOD;
         $db->query($sql);
          
-      
+      $userModel = new Model_DbTable_User();
+      $userModel->addUser(array("username"=>'admin',"password"=>md5("helene"),"email"=>"fact@antsnest.fr","active"=>1, "role"=>  Model_DbTable_User::ADMIN));
          
-          $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(TRUE);
-        
+        $this->_redirect("/init/check");
         
         
         

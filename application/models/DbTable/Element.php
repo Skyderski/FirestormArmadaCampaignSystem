@@ -170,11 +170,17 @@ class Model_DbTable_Element extends Zend_Db_Table_Abstract
         return $row ;
     }   
     
-    public function addElement($data)
+    public function addElement($data,$noupdate=0)
     {
         
         if(!$this->getElementFromCoord($data['mapid'],$data['Xcoord'],$data['Ycoord']))
-            $this->insert($data);
+            {
+                $this->insert($data);
+            }
+        else{
+            if(!$noupdate)
+                $this->update($data, 'id='.$data['id']);
+            }
         
         //return false;
     }
@@ -209,7 +215,7 @@ class Model_DbTable_Element extends Zend_Db_Table_Abstract
                 ->where('Ycoord='.$Ycoord);
         
         $stmt = $select->query();
-       
+      
         return $stmt->fetchObject();
         
     }
